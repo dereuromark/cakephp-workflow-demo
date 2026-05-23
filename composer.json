@@ -38,9 +38,8 @@
         "sort-packages": true
     },
     "scripts": {
-        "post-install-cmd": "App\\Console\\Installer::postInstall",
         "setup": [
-            "@php -r \"@mkdir('tmp', 0777, true); copy('config/app_local.example.php', 'config/app_local.php');\"",
+            "@php -r \"@mkdir('tmp', 0777, true); @mkdir('logs', 0777, true); is_file('config/app_local.php') || copy('config/app_local.example.php', 'config/app_local.php');\"",
             "bin/cake migrations migrate -p Workflow",
             "bin/cake migrations migrate"
         ],
