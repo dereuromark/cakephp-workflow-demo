@@ -30,14 +30,10 @@ class StagingState extends BaseReleaseState
         if ($entity === null) {
             return true;
         }
+        // Use the plugin's finder so the polymorphic columns are mapped for us.
         $priorAttempts = $this->fetchTable('Workflow.WorkflowTransitions')
-            ->find()
-            ->where([
-                'workflow_name' => 'release',
-                'entity_table' => 'Releases',
-                'entity_id' => (string)$entity->get('id'),
-                'transition_name' => 'deploy_staging',
-            ])
+            ->find('forEntity', workflow: 'release', table: 'Releases', id: (string)$entity->get('id'))
+            ->where(['transition_name' => 'deploy_staging'])
             ->count();
 
         if ($priorAttempts < 1) {

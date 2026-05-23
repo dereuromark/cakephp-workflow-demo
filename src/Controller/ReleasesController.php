@@ -123,10 +123,9 @@ class ReleasesController extends AppController
     {
         $timeoutsTable = $this->fetchTable('Workflow.WorkflowTimeouts');
         /** @var array<\Workflow\Model\Entity\WorkflowTimeout> $due */
-        $due = $timeoutsTable->find()
+        $due = $timeoutsTable
+            ->find('forEntity', workflow: 'release', table: 'Releases', id: (string)$id)
             ->where([
-                'entity_table' => 'Releases',
-                'entity_id' => $id,
                 'processed' => false,
                 'due_at <=' => DateTime::now(),
             ])
