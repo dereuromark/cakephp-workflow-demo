@@ -39,7 +39,7 @@ It deliberately exercises **every** capability of the plugin:
 | **Command errors (an *error* outcome)** | `ProductionState` `#[Command]` throws | First rollout throws → logged as `error` → retries |
 | **`#[RequireReason]`** | `ManualReviewState` reject | *Reject* requires a reason |
 | **Audit log** | history table | Every attempt with status + `triggered_by` + blocked/error detail |
-| **Live Mermaid diagram** | view page | Current state highlighted; ━ manual, ┄ automatic |
+| **Live Mermaid diagram** | view page | Current state highlighted; ━ manual, ┄ automatic; edges marked 🛡️ guard · ⚙️ command · ❓ condition |
 
 > **Is there a `manual = true` flag?** No — transitions are **manual by default** (a button/user triggers them).
 > You opt *into* automatic behaviour with `#[Transition(automatic: true)]` or `#[Timeout(...)]`.
@@ -60,19 +60,19 @@ flowchart TD
     released([Released])
     rejected([Rejected])
     draft -->|submit| building
-    building -->|built| testing
-    testing -->|run_check| evaluating
-    evaluating -.->|tests_passed| staging
-    evaluating -.->|retry| testing
-    evaluating -.->|escalate| manual_review
-    manual_review -->|retry_check| testing
-    manual_review -->|approve| staging
+    building -->|"built ⚙️"| testing
+    testing -->|"run_check ⚙️"| evaluating
+    evaluating -.->|"tests_passed ❓"| staging
+    evaluating -.->|"retry ❓"| testing
+    evaluating -.->|"escalate ⚙️"| manual_review
+    manual_review -->|"retry_check ⚙️"| testing
+    manual_review -->|"approve ⚙️"| staging
     manual_review -->|reject| rejected
-    staging -->|deploy_staging| canary
-    canary -->|canary_check| canary_eval
-    canary_eval -.->|canary_healthy| production
-    canary_eval -.->|canary_failed| manual_review
-    production -->|go_live| released
+    staging -->|"deploy_staging 🛡️⚙️"| canary
+    canary -->|"canary_check ⚙️"| canary_eval
+    canary_eval -.->|"canary_healthy ❓"| production
+    canary_eval -.->|"canary_failed ⚙️"| manual_review
+    production -->|"go_live ⚙️"| released
     classDef initial fill:#f5f5f5,stroke:#9e9e9e,stroke-width:2px
     classDef final fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
     classDef failed fill:#ffebee,stroke:#f44336,stroke-width:2px
@@ -84,6 +84,8 @@ flowchart TD
 
 Solid arrows are **manual or timeout** transitions; dashed arrows are **automatic** (condition-driven).
 The **green** line is the happy path — a perfect run from `draft` all the way to `released`.
+Edge markers tell you what each transition carries: **🛡️ a guard** (can block it), **⚙️ a command** (runs side-effect code),
+**❓ a condition** (decides an automatic branch). These are emitted live by the plugin's `MermaidRenderer` with `showDetails: true`.
 
 ### A typical run
 

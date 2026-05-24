@@ -100,8 +100,8 @@ $labels = [
 
         <!-- RIGHT: live workflow diagram -->
         <div style="flex:1;min-width:380px;">
-            <div style="font-size:.8rem;color:#999;margin-bottom:.3rem;">Workflow (━ manual · ┄ automatic · amber = current)</div>
-            <div class="mermaid" style="background:#fff;border:1px solid #eee;border-radius:8px;padding:1rem;"><?= $renderer->render($definition, $release->state) ?></div>
+            <div style="font-size:.8rem;color:#999;margin-bottom:.3rem;">Workflow (━ manual · ┄ automatic · green = happy path · amber = current) — 🛡️ guard · ⚙️ command · ❓ condition</div>
+            <div class="mermaid" style="background:#fff;border:1px solid #eee;border-radius:8px;padding:1rem;"><?= $renderer->render($definition, $release->state, true) ?></div>
         </div>
     </div>
 
