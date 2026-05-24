@@ -11,7 +11,7 @@ use Workflow\Attribute\Transition;
 #[Label('Canary Analysis')]
 #[Color('#7e57c2')]
 // healthy first (condition), unhealthy is the fallback.
-#[Transition(to: ProductionState::class, name: 'canary_healthy', automatic: true)]
+#[Transition(to: ProductionState::class, name: 'canary_healthy', happy: true, automatic: true)]
 #[Transition(to: ManualReviewState::class, name: 'canary_failed', automatic: true)]
 class CanaryEvalState extends BaseReleaseState
 {

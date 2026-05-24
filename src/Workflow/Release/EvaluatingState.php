@@ -11,7 +11,7 @@ use Workflow\Attribute\Transition;
 #[Label('Evaluating')]
 #[Color('#7e57c2')]
 // Order matters: first matching condition wins; the last (unconditioned) is the fallback.
-#[Transition(to: StagingState::class, name: 'tests_passed', automatic: true)]
+#[Transition(to: StagingState::class, name: 'tests_passed', happy: true, automatic: true)]
 #[Transition(to: TestingState::class, name: 'retry', automatic: true)]
 #[Transition(to: ManualReviewState::class, name: 'escalate', automatic: true)]
 class EvaluatingState extends BaseReleaseState

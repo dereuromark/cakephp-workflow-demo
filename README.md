@@ -79,9 +79,11 @@ flowchart TD
     class draft initial
     class released final
     class rejected failed
+    linkStyle 0,1,2,3,7,9,10,11,13 stroke:#2e7d32,stroke-width:2px
 ```
 
 Solid arrows are **manual or timeout** transitions; dashed arrows are **automatic** (condition-driven).
+The **green** line is the happy path — a perfect run from `draft` all the way to `released`.
 
 ### A typical run
 
